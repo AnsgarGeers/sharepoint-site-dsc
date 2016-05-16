@@ -69,18 +69,28 @@ Function Add-SPSiteColumn($web,$config){
 
 }
 
-Function Add-SPSiteColumnsToContentType($web,$contentType,$config){   
+Function Add-SPFieldLinksToContentType($web,$contentType,$config){
  
-    $config.Columns | ForEach-Object {
-        $exists = $web.Fields.ContainsField($_);
+    $config.FieldLinks | ForEach-Object {
+        $exists = $web.Fields.ContainsField($_.InternalName);
         if ($exists){
-            $field = $web.Fields.GetFieldByInternalName($_);
-            $fieldLink = New-Object Microsoft.SharePoint.SPFieldLink($field);
-            $contentType.FieldLinks.Add($fieldLink);
-            $contentType.Update();
+            $field = $web.Fields.GetFieldByInternalName($_.InternalName);
+            $fieldLink = $contentType.FieldLinks[$_.InternalName]
+            if ($fieldLink -eq $null){
+                $fieldLink = New-Object Microsoft.SharePoint.SPFieldLink($field);     
+                $fieldLink.DisplayName = $_.DisplayName;
+                $fieldLink.Hidden = $_.Hidden;
+                $fieldLink.Required = $_.Required;    
+                $contentType.FieldLinks.Add($fieldLink);
+            }else{
+                $fieldLink.DisplayName = $_.DisplayName;
+                $fieldLink.Hidden = $_.Hidden;
+                $fieldLink.Required = $_.Required;    
+            }           
+            
+            $contentType.Update();            
         }
     }
-
 }
 
 Function Add-SPContentType($web,$config){
@@ -91,8 +101,9 @@ Function Add-SPContentType($web,$config){
     $contentType = $webContentTypes.Add($contentType);
     $contentType.Group = $config.Group;
     $contentType.Update();
-    if($config.Columns -ne $null){
-        Add-SPSiteColumnsToContentType -web $web -contentType $contentType -config $config
+
+    if($config.FieldLinks -ne $null){
+        Add-SPFieldLinksToContentType -web $web -contentType $contentType -config $config
     }
     
 }

@@ -102,25 +102,112 @@
             ContentTypeId = "$([Microsoft.SharePoint.SPBuiltInContentTypeId]::Item)0031E5BF2B4E904BC382EB1CA8506419E8007B2EF077CF754EB6A937B68DF53400D1";
             Name = "My Item";
             Group = "My Content Types";
-            Columns = @(
-                "MyTextColumn";
-                "MyMultiTextColumn";
-                "MyChoiceColumn";
-                "MyDateTimeColumn";
-                "MyBooleanColumn";
-                "MyPeopleColumn";
-                "MyNumberColumn";
-                "MyCurrencyColumn";
-                "MyHyperlinkColumn";
-                "MyCalculatedColumn";
+            FieldLinks = @(
+                @{
+                    InternalName = "Title";
+                    DisplayName = "Title";
+                    Required = $false;
+                    Hidden = $true;
+                    ShowInDisplayForm = $false;
+                },
+                @{
+                    InternalName = "MyTextColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyMultiTextColumn";
+                    DisplayName = "My Multi Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyChoiceColumn";
+                    DisplayName = "My Choice Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyDateTimeColumn";
+                    DisplayName = "My DateTime Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyBooleanColumn";
+                    DisplayName = "My Boolean Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyPeopleColumn";
+                    DisplayName = "My People Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyNumberColumn";
+                    DisplayName = "My Number Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyCurrencyColumn";
+                    DisplayName = "My Currency Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Hyperlink Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
+                @{
+                    InternalName = "MyCalculatedColumn";
+                    DisplayName = "My Calculated Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
             )
         },
         @{
             ContentTypeId = "$([Microsoft.SharePoint.SPBuiltInContentTypeId]::Item)0031E5BF2B4E904BC382EB1CA8506419E800EEDE97697FFC4C2B85FDCD5FFB30B198";
             Name = "My Lookup Item";
             Group = "My Content Types";
-            Columns = @(
-                "MyTextColumn";
+            FieldLinks = @(
+                @{
+                    InternalName = "Title";
+                    DisplayName = "Title";
+                    Required = $false;
+                    Hidden = $true;
+                    ShowInDisplayForm = $false;
+                },
+                @{
+                    InternalName = "MyTextColumn";
+                    DisplayName = "My Text Column";
+                    Required = $true;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }                
             )
         },
         @{
@@ -132,17 +219,91 @@
             ContentTypeId = "$([Microsoft.SharePoint.SPBuiltInContentTypeId]::Document)0031E5BF2B4E904BC382EB1CA8506419E800853DDE728AF44BC7846D3751D2014CE5";
             Name = "My Document";
             Group = "My Content Types";
-            Columns = @(
-                "MyTextColumn";
-                "MyMultiTextColumn";
-                "MyChoiceColumn";
-                "MyDateTimeColumn";
-                "MyBooleanColumn";
-                "MyPeopleColumn";
-                "MyNumberColumn";                
-                "MyCurrencyColumn";
-                "MyHyperlinkColumn";
-                "MyCalculatedColumn";                
+            FieldLinks = @(
+                @{
+                    InternalName = "Title";
+                    DisplayName = "Title";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $false;
+                },
+                @{
+                    InternalName = "MyTextColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyMultiTextColumn";
+                    DisplayName = "My Multi Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyChoiceColumn";
+                    DisplayName = "My Choice Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyDateTimeColumn";
+                    DisplayName = "My DateTime Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyBooleanColumn";
+                    DisplayName = "My Boolean Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyPeopleColumn";
+                    DisplayName = "My People Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyNumberColumn";
+                    DisplayName = "My Number Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyCurrencyColumn";
+                    DisplayName = "My Currency Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Hyperlink Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
+                @{
+                    InternalName = "MyCalculatedColumn";
+                    DisplayName = "My Calculated Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
             )
         }
     )
