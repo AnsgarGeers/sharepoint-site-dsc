@@ -42,6 +42,90 @@ The main objective is simple, execute a single script that takes in a configurat
             Group = "My Columns"
             FieldType = [Microsoft.SharePoint.SPFieldType]::Text;
             Required = $true;            
+        },
+        @{            
+            InternalName = "MyMultiTextColumn";
+            DisplayName = "My Multi Text Column";
+            Group = "My Columns"
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Note;
+            UnlimitedLengthInDocumentLibrary = $false;
+            NumberOfLines = 10;
+            RichText = $true;
+            RichTextMode = [Microsoft.SharePoint.SPRichTextMode]::FullHtml;
+            AppendOnly = $true;
+            Required = $true;                     
+        },
+        @{
+            InternalName = "MyChoiceColumn";
+            DisplayName = "My Choice Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Choice;  
+            Choices = @(
+                "A";
+                "B";
+                "C";
+            )
+            Required = $true;
+        },
+        @{
+            InternalName = "MyDateTimeColumn";
+            DisplayName = "My Date Time Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::DateTime;
+            DateFormat = [Microsoft.SharePoint.SPDateTimeFieldFormatType]::DateOnly;            
+            Required = $true;
+        },
+        @{
+            InternalName = "MyBooleanColumn";
+            DisplayName = "My Boolean Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Boolean;
+            DefaultValue = "0"            
+        },
+        @{
+            InternalName = "MyPeopleColumn";
+            DisplayName = "My People Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::User;
+            SelectionMode = [Microsoft.SharePoint.SPFieldUserSelectionMode]::PeopleOnly;
+            Required = $true;
+            EnforceUniqueValues = $true;
+        },
+        @{
+            InternalName = "MyNumberColumn";
+            DisplayName = "My Number Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Number;
+            DisplayFormat = [Microsoft.SharePoint.SPNumberFormatTypes]::NoDecimal;
+            MinimumValue = 1;
+            MaximumValue = 10;
+            ShowAsPercentage = $true;
+            Required = $true;
+        },
+        @{
+            InternalName = "MyCurrencyColumn";
+            DisplayName = "My Currency Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Currency;
+            CurrencyLocaleId = 2057;
+            DisplayFormat = [Microsoft.SharePoint.SPNumberFormatTypes]::NoDecimal;
+            MinimumValue = 1;
+            MaximumValue = 10;
+        },
+        @{
+            InternalName = "MyHyperlinkColumn";
+            DisplayName = "My Hyperlink Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::URL; 
+            DisplayFormat = [Microsoft.SharePoint.SPUrlFieldFormatType]::Hyperlink;
+        },
+        @{
+            InternalName = "MyCalculatedColumn";
+            DisplayName = "My Calculated Column";
+            Group = "My Columns";
+            FieldType = [Microsoft.SharePoint.SPFieldType]::Calculated;
+            Formula = "=IF([My Choice Column]=`"A`",TRUE,FALSE)";
+            OutputType = [Microsoft.SharePoint.SPFieldType]::Boolean;
         }
     )
     
