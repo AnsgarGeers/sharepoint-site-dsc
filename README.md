@@ -22,8 +22,11 @@ The main objective is simple, execute a single script that takes in a configurat
     - Calculated
   * Site Content Types
   * Lists
-    - Views
+    - Creates new Views
   * Lookup Fields
+  * Security Groups
+    - Creates new and updates existing
+    - Adds collection of users to groups
   * Data Import
     - List Items via PSObject
 
@@ -111,6 +114,43 @@ The main objective is simple, execute a single script that takes in a configurat
                     List = "My Custom List";
                     View = "My View";
                 }
+            )
+        }
+    )
+
+###Security Groups
+
+    SecurityGroups = @(
+        @{
+            Name = "SharePoint Site DSC Visitors";
+            Owner = "gt\garry.trinder"
+            DefaultUser = "gt\adamb";
+            Description = [string]::Empty;
+            AllowMembersEditMembership = $false;
+            AllowRequestToJoinLeave = $false;
+            AutoAcceptRequestToJoinLeave = $false;
+            OnlyAllowMembersViewMembership = $false;
+            RequestToJoinLeaveEmailSetting = [string]::Empty;
+            Users = @(
+                "gt\stephed";
+                "gt\olivief";
+                "gt\michelf";
+                "gt\arleneh";
+                "gt\pieterw";
+                "gt\erwinz";
+                "gt\lukask";
+                "gt\kene";
+                "gt\justint";
+                "gt\jong";
+                "gt\job";
+                "gt\hansg";
+                "gt\davidb1";
+                "gt\maried";
+                "gt\kevink";
+                "gt\kaia";
+                "gt\manishc";
+                "gt\sunilu";
+                "gt\luisb";
             )
         }
     )
