@@ -22,6 +22,7 @@ The main objective is simple, execute a single script that takes in a configurat
     - Calculated
   * Site Content Types
   * Lists
+    - Views
   * Lookup Fields
   * Data Import
     - List Items via PSObject
