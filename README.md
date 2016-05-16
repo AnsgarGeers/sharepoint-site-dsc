@@ -5,6 +5,8 @@ The main objective is simple, execute a single script that takes in a configurat
 
 ##Usage
 
+*Prerequisities: You must have pre created your site collection, deployed the 3 files to the same folder and changed to that directory*
+
 `SharePointTeamSite.ps1 -SiteUrl <siteurl> -DataFile <datafile>.psm1`
 
 ##Support
@@ -21,9 +23,11 @@ The main objective is simple, execute a single script that takes in a configurat
     - Currency
     - Calculated
   * Site Content Types
-    - Set and update FieldLinks
+    - Set and update FieldLinks (override Column default visibility)
   * Lists
-    - Views
+    - Automatically removes the OOTB content type
+    - First content type in Collection is made Default View
+    - Add Views
   * Lookup Fields
     - List in current web only
     - Add to specified collection of Content Types
