@@ -12,7 +12,12 @@ $site = Get-SPSite -Identity $SiteUrl
 $web = $site.OpenWeb()
 
 if($config -ne $null){
-    Start-IABuilder -web $web -config $config
+    try{
+        Start-IABuilder -web $web -config $config
+    }catch [Exception]{
+        Write-Warning "Error Occurred" 
+        echo $_.Exception|format-list -force
+    }    
 }
 
 $web.Dispose();

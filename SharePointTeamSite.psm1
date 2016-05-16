@@ -98,14 +98,15 @@ Function Add-SPContentType($web,$config){
     $webContentTypes = $web.ContentTypes;
     $contentTypeId = New-Object Microsoft.SharePoint.SPContentTypeId($config.ContentTypeId);
     $contentType = New-Object Microsoft.SharePoint.SPContentType($contentTypeId,$webContentTypes,$config.Name);
-    $contentType = $webContentTypes.Add($contentType);
+    $contentType = $web.ContentTypes.Add($contentType);
     $contentType.Group = $config.Group;
     $contentType.Update();
 
     if($config.FieldLinks -ne $null){
         Add-SPFieldLinksToContentType -web $web -contentType $contentType -config $config
     }
-    
+
+    $web.Update();
 }
 
 Function Remove-SPContentTypes($web,$config){
@@ -173,19 +174,22 @@ Function Add-SPLookupColumn($web,$config){
     $spField.LookupField = $config.LookupField;
     $spField.Update();
 
-    $config.ContentTypes | ForEach-Object {
-        $fieldLink = New-Object Microsoft.SharePoint.SPFieldLink($spField);
-        $web.ContentTypes[$_].FieldLinks.Add($fieldLink);
-        $web.ContentTypes[$_].Update($true);
+    if ($config.ContentTypes -ne $null){
+        $config.ContentTypes | ForEach-Object {
+            $fieldLink = New-Object Microsoft.SharePoint.SPFieldLink($spField);
+            $web.ContentTypes[$_].FieldLinks.Add($fieldLink);
+            $web.ContentTypes[$_].Update($true);
+        }
     }
 
-    $config.Views | ForEach-Object {
-        $list = $web.Lists.TryGetList($_.List);
-        $view = $list.Views[$_.View]
-        $view.ViewFields.Add($config.InternalName);
-        $view.Update();
+    if($config.Views -ne $null){
+        $config.Views | ForEach-Object {
+            $list = $web.Lists.TryGetList($_.List);
+            $view = $list.Views[$_.View]
+            $view.ViewFields.Add($config.InternalName);
+            $view.Update();
+        }
     }
-
 }
 
 Function Add-SPListData($web,$config){
@@ -239,10 +243,13 @@ Function Add-SPSecurityGroup($web, $config){
         }
     }
 
-    $config.Users | ForEach-Object {
-        $user = $web.EnsureUser($_);            
-        $group.AddUser($user);
+    if($config.Users -ne $null){
+        $config.Users | ForEach-Object {
+            $user = $web.EnsureUser($_);            
+            $group.AddUser($user);
+        }
     }
+    
 }
 
 Function Start-IABuilder($web,$config){
@@ -250,35 +257,44 @@ Function Start-IABuilder($web,$config){
     Remove-SPLists -web $web -config $config
     Remove-SPContentTypes -web $web -config $config
     
-    $config.Columns | ForEach-Object {
-        Write-Progress -Activity "Creating Site Columns..." -Status "Progress > $($config.Columns.indexOf($_) + 1) of $($config.Columns.Count)" -PercentComplete (($($config.Columns.indexOf($_) +1)/$($config.Columns.Count)*100)) -CurrentOperation $_.InternalName
-        Add-SPSiteColumn -web $web -config $_        
+    if($config.Columns -ne $null){
+        $config.Columns | ForEach-Object {
+            Write-Progress -Activity "Creating Site Columns..." -Status "Progress > $($config.Columns.indexOf($_) + 1) of $($config.Columns.Count)" -PercentComplete (($($config.Columns.indexOf($_) +1)/$($config.Columns.Count)*100)) -CurrentOperation $_.InternalName
+            Add-SPSiteColumn -web $web -config $_        
+        }
     }
     
-    $config.ContentTypes | ForEach-Object {
-        Write-Progress -Activity "Creating Site Content Types..." -Status "Progress > $($config.ContentTypes.indexOf($_) + 1) of $($config.ContentTypes.Count)" -PercentComplete (($($config.ContentTypes.indexOf($_) +1)/$($config.ContentTypes.Count)*100)) -CurrentOperation $_.Name
-        Add-SPContentType -web $web -config $_
+    if($config.ContentTypes -ne $null){
+        $config.ContentTypes | ForEach-Object {
+            Write-Progress -Activity "Creating Site Content Types..." -Status "Progress > $($config.ContentTypes.indexOf($_) + 1) of $($config.ContentTypes.Count)" -PercentComplete (($($config.ContentTypes.indexOf($_) +1)/$($config.ContentTypes.Count)*100)) -CurrentOperation $_.Name
+            Add-SPContentType -web $web -config $_
+        }
     }
-
-    $config.Lists | ForEach-Object {
-        Write-Progress -Activity "Creating Lists..." -Status "Progress > $($config.Lists.indexOf($_) + 1) of $($config.Lists.Count)" -PercentComplete (($($config.Lists.indexOf($_) +1)/$($config.Lists.Count)*100)) -CurrentOperation $_.Title
-        Add-SPList -web $web -config $_
+    if($config.Lists -ne $null){
+        $config.Lists | ForEach-Object {
+            Write-Progress -Activity "Creating Lists..." -Status "Progress > $($config.Lists.indexOf($_) + 1) of $($config.Lists.Count)" -PercentComplete (($($config.Lists.indexOf($_) +1)/$($config.Lists.Count)*100)) -CurrentOperation $_.Title
+            Add-SPList -web $web -config $_
+        }
     }
-
-    $config.Lookups | ForEach-Object {
-        Write-Progress -Activity "Creating Site Lookup Columns..." -Status "Progress > $($config.Lookups.indexOf($_) + 1) of $($config.Lookups.Count)" -PercentComplete (($($config.Lookups.indexOf($_) +1)/$($config.Lookups.Count)*100)) -CurrentOperation $_.InternalName
-        Add-SPLookupColumn -web $web -config $_
+    if($config.Lookups -ne $null){
+        $config.Lookups | ForEach-Object {
+            Write-Progress -Activity "Creating Site Lookup Columns..." -Status "Progress > $($config.Lookups.indexOf($_) + 1) of $($config.Lookups.Count)" -PercentComplete (($($config.Lookups.indexOf($_) +1)/$($config.Lookups.Count)*100)) -CurrentOperation $_.InternalName
+            Add-SPLookupColumn -web $web -config $_
+        }
     }
-
-    $config.DataImports | ForEach-Object {
-        Write-Progress -Activity "Importing data..." -Status "Progress > $($config.DataImports.indexOf($_) + 1) of $($config.DataImports.Count)" -PercentComplete (($($config.DataImports.indexOf($_) +1)/$($config.DataImports.Count)*100)) -CurrentOperation $_.List
-        Add-SPListData -web $web -config $_
+    if($config.DataImports -ne $null){
+        $config.DataImports | ForEach-Object {
+            Write-Progress -Activity "Importing data..." -Status "Progress > $($config.DataImports.indexOf($_) + 1) of $($config.DataImports.Count)" -PercentComplete (($($config.DataImports.indexOf($_) +1)/$($config.DataImports.Count)*100)) -CurrentOperation $_.List
+            Add-SPListData -web $web -config $_
+        }
     }
-
-    $config.SecurityGroups | ForEach-Object {
-        Write-Progress -Activity "Creating Security Groups..." -Status "Progress > $($config.SecurityGroups.indexOf($_) + 1) of $($config.SecurityGroups.Count)" -PercentComplete (($($config.SecurityGroups.indexOf($_) +1)/$($config.SecurityGroups.Count)*100)) -CurrentOperation $_.Name
-        Add-SPSecurityGroup -web $web -config $_
+    if($config.SecurityGroups -ne $null){
+        $config.SecurityGroups | ForEach-Object {
+            Write-Progress -Activity "Creating Security Groups..." -Status "Progress > $($config.SecurityGroups.indexOf($_) + 1) of $($config.SecurityGroups.Count)" -PercentComplete (($($config.SecurityGroups.indexOf($_) +1)/$($config.SecurityGroups.Count)*100)) -CurrentOperation $_.Name
+            Add-SPSecurityGroup -web $web -config $_
+        }
     }
+    
 }
 
 Export-ModuleMember -Function *
