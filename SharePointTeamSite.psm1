@@ -211,6 +211,40 @@ Function Add-SPListData($web,$config){
     
 }
 
+Function Add-SPSecurityGroup($web, $config){
+
+    $group = $web.SiteGroups.GetByName($config.Name);
+    $owner = $web.EnsureUser($config.Owner);
+    $defaultUser = $web.EnsureUser($config.DefaultUser);
+
+    if ($group -eq $null){        
+        $web.SiteGroups.Add($config.Name, $owner, $defaultUser, $config.Description);
+        $web.Update();
+        $group = $web.SiteGroups.GetByName($config.Name);
+    }
+
+    $group.Owner = $owner;    
+    $group.Description = $config.Description;
+    $group.AllowMembersEditMembership = $config.AllowMembersEditMembership;
+    $group.AllowRequestToJoinLeave = $config.AllowRequestToJoinLeave;
+    $group.AutoAcceptRequestToJoinLeave = $config.AutoAcceptRequestToJoinLeave;
+    $group.OnlyAllowMembersViewMembership = $config.OnlyAllowMembersViewMembership;
+    $group.RequestToJoinLeaveEmailSetting = $config.RequestToJoinLeaveEmailSetting;
+    $group.Update();
+
+    $users = $group.Users;
+    if ($users.Count -gt 0){
+        $users | ForEach-Object {
+            $group.RemoveUser($_);
+        }
+    }
+
+    $config.Users | ForEach-Object {
+        $user = $web.EnsureUser($_);            
+        $group.AddUser($user);
+    }
+}
+
 Function Start-IABuilder($web,$config){
 
     Remove-SPLists -web $web -config $config
@@ -239,6 +273,11 @@ Function Start-IABuilder($web,$config){
     $config.DataImports | ForEach-Object {
         Write-Progress -Activity "Importing data..." -Status "Progress > $($config.DataImports.indexOf($_) + 1) of $($config.DataImports.Count)" -PercentComplete (($($config.DataImports.indexOf($_) +1)/$($config.DataImports.Count)*100)) -CurrentOperation $_.List
         Add-SPListData -web $web -config $_
+    }
+
+    $config.SecurityGroups | ForEach-Object {
+        Write-Progress -Activity "Creating Security Groups..." -Status "Progress > $($config.SecurityGroups.indexOf($_) + 1) of $($config.SecurityGroups.Count)" -PercentComplete (($($config.SecurityGroups.indexOf($_) +1)/$($config.SecurityGroups.Count)*100)) -CurrentOperation $_.Name
+        Add-SPSecurityGroup -web $web -config $_
     }
 }
 

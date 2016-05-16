@@ -17,3 +17,6 @@ if($config -ne $null){
 
 $web.Dispose();
 $site.Dispose();
+
+# http://teams.sp2013.gt.local/sites/SharePointSiteDSC
+# .\SharePointTeamSiteConfig.psm1

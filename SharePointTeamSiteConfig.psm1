@@ -472,6 +472,80 @@
             )
         }
     )
+    SecurityGroups = @(
+        @{
+            Name = "SharePoint Site DSC Visitors";
+            Owner = "gt\garry.trinder"
+            DefaultUser = "gt\adamb";
+            Description = [string]::Empty;
+            AllowMembersEditMembership = $false;
+            AllowRequestToJoinLeave = $false;
+            AutoAcceptRequestToJoinLeave = $false;
+            OnlyAllowMembersViewMembership = $false;
+            RequestToJoinLeaveEmailSetting = [string]::Empty;
+            Users = @(
+                "gt\stephed";
+                "gt\olivief";
+                "gt\michelf";
+                "gt\arleneh";
+                "gt\pieterw";
+                "gt\erwinz";
+                "gt\lukask";
+                "gt\kene";
+                "gt\justint";
+                "gt\jong";
+                "gt\job";
+                "gt\hansg";
+                "gt\davidb1";
+                "gt\maried";
+                "gt\kevink";
+                "gt\kaia";
+                "gt\manishc";
+                "gt\sunilu";
+                "gt\luisb";
+            )
+        },
+        @{
+            Name = "My Security Group";
+            Owner = "gt\garry.trinder"
+            DefaultUser = "gt\adamb";
+            Description = [string]::Empty;
+            AllowMembersEditMembership = $false;
+            AllowRequestToJoinLeave = $false;
+            AutoAcceptRequestToJoinLeave = $false;
+            OnlyAllowMembersViewMembership = $false;
+            RequestToJoinLeaveEmailSetting = [string]::Empty;            
+            Users = @(
+                "gt\danj";
+                "gt\adamb";
+                "gt\alans";
+                "gt\chrisn";
+                "gt\dianet";
+                "gt\christk";
+                "gt\frankm1";
+                "gt\karimm";
+                "gt\danp";
+                "gt\jeffh";
+                "gt\garthf";
+                "gt\cesarg";
+                "gt\christg";
+                "gt\jackc";
+                "gt\davidm";
+                "gt\alanb";
+                "gt\davids";
+                "gt\annal";
+                "gt\eduardd";
+                "gt\spencel";
+                "gt\kellyw";
+                "gt\mollyc";
+                "gt\larryz";
+                "gt\arturol";
+                "gt\aprils";
+                "gt\aaronp";
+                "gt\andrewm";
+            )
+        }        
+    )
 }
 
 Export-ModuleMember -Variable config
