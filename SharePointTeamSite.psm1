@@ -193,24 +193,29 @@ Function Add-SPLookupColumn($web,$config){
 }
 
 Function Add-SPListData($web,$config){
-    $list = $web.Lists.TryGetList($_.List);
-    $collection = $null
+    $list = $web.Lists.TryGetList($config.List);
 
     if ($config.Items -ne $null){
-        $collection = $config.Items
+        $config.Items | ForEach-Object {
+            $item = $_;
+            $listItem = $list.Items.Add();
+            $item.Keys | ForEach-Object { 
+                $listItem[$_] = $item[$_]
+            }
+            $listItem.Update();
+        }
     }
 
     if ($config.Csv -ne $null){
-        $collection = Import-Csv -Path $config.Csv
-    }
-
-    $collection | ForEach-Object {
-        $item = $_;
-        $listItem = $list.Items.Add();
-        $item.Keys | ForEach-Object { 
-            $listItem[$_] = $item[$_]
+        $items = Import-Csv -Path $config.Csv
+        $items | ForEach-Object {
+            $item = $_;
+            $listItem = $list.Items.Add();
+            $_.psobject.properties | ForEach-Object {
+                $listItem[$_.Name] = $_.Value;
+            }
+            $listItem.Update();
         }
-        $listItem.Update();
     }
     
 }
