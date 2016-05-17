@@ -127,6 +127,7 @@ The main objective is simple, execute a single script that takes in a configurat
             Formula = "=IF([My Choice Column]=`"A`",TRUE,FALSE)";
             OutputType = [Microsoft.SharePoint.SPFieldType]::Boolean;
         }
+    )
     
 ###Site Content Types
 
