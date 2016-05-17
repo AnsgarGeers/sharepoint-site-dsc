@@ -5,7 +5,7 @@
 
 Add-PSSnapin "Microsoft.SharePoint.PowerShell"
 
-Import-Module .\SharePointTeamSite.psm1 -Force
+Import-Module .\SharePointSiteDSC.psm1 -Force
 Import-Module $DataFile -Force 
 
 $site = Get-SPSite -Identity $SiteUrl
