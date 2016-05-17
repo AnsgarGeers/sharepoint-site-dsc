@@ -29,6 +29,7 @@ The main objective is simple, execute a single script that takes in a configurat
     - Adds collection of users to groups
   * Data Import
     - List Items via PSObject
+    - List Items via CSV Import
 
 ##Configuration Examples
 
@@ -162,31 +163,30 @@ The main objective is simple, execute a single script that takes in a configurat
             List = "My Lookup List";
             Items = @(
                 @{
-                    Title = "Title";
                     MyTextColumn = "England";
                     ContentType = "My Lookup Item";
                 },
                 @{
-                    Title = "Title";
                     MyTextColumn = "Scotland";
                     ContentType = "My Lookup Item";
                 },
                 @{
-                    Title = "Title";
                     MyTextColumn = "Wales";
                     ContentType = "My Lookup Item";
                 },
                 @{
-                    Title = "Title";
                     MyTextColumn = "N. Ireland";
                     ContentType = "My Lookup Item";
                 },
                 @{
-                    Title = "Title";
                     MyTextColumn = "Ireland";
                     ContentType = "My Lookup Item";
                 }
             )
+        },
+        @{
+            List = "My List";
+            Csv = "MyCsv.csv";
         }
     )
 
