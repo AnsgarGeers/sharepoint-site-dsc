@@ -135,6 +135,97 @@ The main objective is simple, execute a single script that takes in a configurat
             ContentTypeId = "$([Microsoft.SharePoint.SPBuiltInContentTypeId]::Item)0031E5BF2B4E904BC382EB1CA8506419E8";
             Name = "Base Item";
             Group = "Base Content Types";
+        },   
+        @{
+            ContentTypeId = "$([Microsoft.SharePoint.SPBuiltInContentTypeId]::Item)0031E5BF2B4E904BC382EB1CA8506419E8007B2EF077CF754EB6A937B68DF53400D1";
+            Name = "My Item";
+            Group = "My Content Types";
+            FieldLinks = @(
+                @{
+                    InternalName = "Title";
+                    DisplayName = "Title";
+                    Required = $false;
+                    Hidden = $true;
+                    ShowInDisplayForm = $false;
+                },
+                @{
+                    InternalName = "MyTextColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyMultiTextColumn";
+                    DisplayName = "My Multi Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyChoiceColumn";
+                    DisplayName = "My Choice Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyDateTimeColumn";
+                    DisplayName = "My DateTime Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyBooleanColumn";
+                    DisplayName = "My Boolean Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyPeopleColumn";
+                    DisplayName = "My People Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyNumberColumn";
+                    DisplayName = "My Number Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyCurrencyColumn";
+                    DisplayName = "My Currency Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Text Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                },
+                @{
+                    InternalName = "MyHyperlinkColumn";
+                    DisplayName = "My Hyperlink Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
+                @{
+                    InternalName = "MyCalculatedColumn";
+                    DisplayName = "My Calculated Column";
+                    Required = $false;
+                    Hidden = $false;
+                    ShowInDisplayForm = $true;
+                }
+            )
         }
     )
     
@@ -142,23 +233,27 @@ The main objective is simple, execute a single script that takes in a configurat
 
     Lists = @(
         @{
-            Title = "My Custom List";
+            Title = "My Document Library";
             Description = [string]::Empty;
-            ListTemplateType = [Microsoft.SharePoint.SPListTemplateType]::GenericList;
-            ForceCheckout = $false;
+            ListTemplateType = [Microsoft.SharePoint.SPListTemplateType]::DocumentLibrary;
+            ForceCheckout = $true;
             EnableAttachments = $false;
             EnableFolderCreation = $false;
             EnableModeration = $false;
-            EnableMinorVersions = $false;
-            EnableVersioning = $false;
+            EnableMinorVersions = $true;
+            EnableVersioning = $true;
             ContentTypes = @(
-                "My Item"
+                "My Document"
             );
             Views = @(
                 @{
-                    Name = "My View";
+                    Name = "My Documents";
                     ViewFields = @(
+                        "DocIcon";
+                        "LinkFilename";
                         "Title";
+                        "Modified";
+                        "Editor";
                         "MyTextColumn";
                         "MyMultiTextColumn";
                         "MyChoiceColumn";
@@ -171,7 +266,14 @@ The main objective is simple, execute a single script that takes in a configurat
                         "MyCalculatedColumn";
                         "ContentType";
                     );
-                    Query = [string]::Empty;
+                    Query = "<Where>
+                                <Eq>
+                                    <FieldRef Name='MyPeopleColumn' />
+                                    <Value Type='Integer' >
+                                        <UserID Type='Integer' />
+                                    </Value>
+                                </Eq>
+                            </Where>";
                     RowLimit = 30;
                     Paged = $true;
                     DefaultView = $true;
