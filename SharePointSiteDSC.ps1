@@ -16,7 +16,9 @@ if($config -ne $null){
     } catch [Exception] {
         Write-Warning "Error Occurred"
         echo $_.Exception | Format-List -force
-    }    
+    } finally {
+        $web.Dispose();
+    }
 }
 
 $web.Dispose();

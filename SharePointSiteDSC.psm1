@@ -2,8 +2,7 @@
 
     try {
         $field = $web.Fields.GetFieldByInternalName($config.InternalName)
-        $web.Fields.Delete($field)
-        Start-Sleep -s 1
+        $web.Fields.Delete($field)        
     } catch {
         #Column not found, move on
     }
@@ -46,7 +45,9 @@ Function Add-SPSiteColumn($web,$config){
             $spField.UnlimitedLengthInDocumentLibrary = $config.UnlimitedLengthInDocumentLibrary;
             $spField.NumberOfLines = $config.NumberOfLines;
             $spField.RichText = $config.RichText;
-            $spField.RichTextMode = $config.RichTextMode;         
+            if ($spField.RichText -eq $true){                
+                $spField.RichTextMode = $config.RichTextMode;
+            }                     
             $spField.AppendOnly = $config.AppendOnly; 
         }
         "Currency" {
@@ -110,14 +111,19 @@ Function Add-SPContentType($web,$config){
 }
 
 Function Remove-SPContentTypes($web,$config){
-
+    
     for($i=$config.ContentTypes.Length - 1; $i -ge 0; $i--){       
+        Write-Host $config.ContentTypes.Item($i).Name -ForegroundColor Blue
         $contentType = $web.ContentTypes[$config.ContentTypes.Item($i).Name];
-        if ($contentType -ne $null){
-            $web.ContentTypes.Delete($contentType.Id)
+        if ($contentType -ne $null){            
+            try{
+                $web.ContentTypes.Delete($contentType.Id)
+            }
+            catch{
+                [Microsoft.SharePoint.SPContentTypeUsage]::GetUsages($contentType) | ForEach-Object { $_.Url }                
+            }            
         }
-    }
-        
+    }        
 }
 
 Function Add-SPList($web,$config){
@@ -152,11 +158,12 @@ Function Add-SPList($web,$config){
 }
 
 Function Remove-SPLists($web,$config){
-
-    $config.Lists | ForEach-Object {
-        $list = $web.Lists.TryGetList($_.Title)
+    
+    $config.Lists | ForEach-Object {        
+        $list = $web.Lists[$_.Title]
         if($list -ne $null){
-            $web.Lists.Delete($list.ID)
+            Write-Host $list.Title -ForegroundColor Magenta;
+            $web.Lists.Delete($list.ID);
         }    
     }
     
@@ -259,6 +266,7 @@ Function Add-SPSecurityGroup($web, $config){
 
 Function Start-IABuilder($web,$config){
 
+    Write-Host "Cleanup..." -ForegroundColor Yellow;
     Remove-SPLists -web $web -config $config
     Remove-SPContentTypes -web $web -config $config
     
