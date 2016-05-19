@@ -102,7 +102,7 @@ Function Add-SPContentType($web,$config){
     $contentType.Group = $config.Group;
     $contentType.Update();
 
-    if($config.FieldLinks -ne $null){
+    if ($config.FieldLinks -ne $null){
         Add-SPFieldLinksToContentType -web $web -contentType $contentType -config $config
     }
 
@@ -111,10 +111,9 @@ Function Add-SPContentType($web,$config){
 
 Function Remove-SPContentTypes($web,$config){
 
-    for($i=$config.ContentTypes.Length - 1; $i -ge 0; $i--){
-        #$config.ContentTypes.Item($i);
+    for($i=$config.ContentTypes.Length - 1; $i -ge 0; $i--){       
         $contentType = $web.ContentTypes[$config.ContentTypes.Item($i).Name];
-        if($contentType -ne $null){
+        if ($contentType -ne $null){
             $web.ContentTypes.Delete($contentType.Id)
         }
     }
@@ -123,9 +122,10 @@ Function Remove-SPContentTypes($web,$config){
 
 Function Add-SPList($web,$config){
     
-    $listId = $web.Lists.Add($config.Title,$config.Description,$config.ListTemplateType);
+    $listId = $web.Lists.Add($config.Title.Replace(" ",[string]::Empty),$config.Description,$config.ListTemplateType);
     $list = $web.Lists.GetList($listId,$false);
     
+    $list.Title = $config.Title;
     $list.ForceCheckout = $config.ForceCheckout;
     $list.EnableAttachments = $config.EnableAttachments;
     $list.EnableFolderCreation = $config.EnableFolderCreation;
