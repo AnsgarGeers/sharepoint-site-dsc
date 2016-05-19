@@ -444,8 +444,7 @@
         @{
             List = "My Lookup List";
             Items = @(
-                @{
-                    Title = "Title";
+                @{                    
                     MyTextColumn = "England";
                     ContentType = "My Lookup Item";
                 },
@@ -454,18 +453,15 @@
                     MyTextColumn = "Scotland";
                     ContentType = "My Lookup Item";
                 },
-                @{
-                    Title = "Title";
+                @{                   
                     MyTextColumn = "Wales";
                     ContentType = "My Lookup Item";
                 },
-                @{
-                    Title = "Title";
+                @{                    
                     MyTextColumn = "N. Ireland";
                     ContentType = "My Lookup Item";
                 },
-                @{
-                    Title = "Title";
+                @{                    
                     MyTextColumn = "Ireland";
                     ContentType = "My Lookup Item";
                 }

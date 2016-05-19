@@ -5,7 +5,7 @@ The main objective is simple, execute a single script that takes in a configurat
 
 ##Usage
 
-`SharePointSiteDSC.ps1 -SiteUrl <siteurl> -DataFile <datafile>.psm1`
+`SharePointSiteDSC.ps1 -WebUrl <weburl> -DataFile <datafile>.psm1`
 
 ##Support
 (So far) the script supports the creation of the following through configuration
