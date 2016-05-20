@@ -1,18 +1,15 @@
 ﻿Function Remove-SPSiteColumn($web, $config){
-
     try {
-        $field = $web.Fields.GetFieldByInternalName($config.InternalName)
-        $web.Fields.Delete($field)        
+        $field = $web.Fields.GetFieldByInternalName($config.InternalName);
+        $field.Delete();
+        Write-Host $config.InternalName -ForegroundColor Cyan
     } catch {
-        #Column not found, move on
+        Write-Warning "[CATCH] Unable to remove $($config.InternalName)";
     }
 }
 
 Function Add-SPSiteColumn($web,$config){
-    
-    Remove-SPSiteColumn -web $web -config $config
 
-    $spField = $null;    
     $fieldName = $web.Fields.Add($config.InternalName,$config.FieldType,$config.Required,$false,$config.Choices); 
     $spField = $web.Fields.GetFieldByInternalName($fieldName);
     
@@ -171,8 +168,6 @@ Function Remove-SPLists($web,$config){
 
 Function Add-SPLookupColumn($web,$config){
 
-    Remove-SPSiteColumn -web $web -config $config
-
     $lookupList = $web.Lists.TryGetList($config.LookupList);
     $fieldName = $web.Fields.AddLookup($config.InternalName,$lookupList.ID,$config.Required)
     $spField = $web.Fields.GetFieldByInternalName($fieldName);
@@ -224,7 +219,39 @@ Function Add-SPListData($web,$config){
             $listItem.Update();
         }
     }
-    
+
+    if ($config.Documents -ne $null){
+        $config.Documents | ForEach-Object {
+            $bytes = Get-Content $_.PathToLocalDocument -Encoding Byte -ReadCount 0;
+            $file = $list.RootFolder.Files.Add(
+                $_.FileName,
+                $bytes,
+                $_.Properties,
+                $web.EnsureUser($_.CreatedBy),
+                $web.EnsureUser($_.ModifiedBy),
+                $_.TimeCreated,
+                $_.TimeModified,      
+                $_.Overwrite   
+            )
+
+            if ($_.ContentType -ne $null){
+                $file.Item[[Microsoft.SharePoint.SPBuiltInFieldId]::ContentType] = $_.ContentType;
+                $file.Item.SystemUpdate($false);
+            }
+            
+            if ($list.EnableVersioning -and $list.EnableMinorVersions){
+                $file.Publish([string]::Empty);
+            }
+
+            if ($_.IsTemplate -ne $null){
+                if($_.IsTemplate){
+                    $contentType = $web.ContentTypes[$_.ContentType];
+                    $contentType.DocumentTemplate = $file.ServerRelativeUrl;
+                    $contentType.Update($true);
+                }
+            }
+        }
+    }    
 }
 
 Function Add-SPSecurityGroup($web, $config){
@@ -261,15 +288,32 @@ Function Add-SPSecurityGroup($web, $config){
             $group.AddUser($user);
         }
     }
+}
+
+Function Remove-SPSiteColumns($web,$config){
+    
+    if($config.Columns -ne $null){
+        $config.Columns | ForEach-Object {
+            Remove-SPSiteColumn -web $web -config $_
+        }
+    }
+    
+    if($config.Lookups -ne $null){
+        $config.Lookups | ForEach-Object {
+            Remove-SPSiteColumn -web $web -config $_
+        }
+    }
     
 }
 
 Function Start-IABuilder($web,$config){
 
     Write-Host "Cleanup..." -ForegroundColor Yellow;
-    Remove-SPLists -web $web -config $config
-    Remove-SPContentTypes -web $web -config $config
-    
+    Remove-SPLists -web $web -config $config;
+    Remove-SPContentTypes -web $web -config $config;
+    Remove-SPSiteColumns -web $web -config $config;
+    Write-Host "Cleanup completed... Processing configuration..." -ForegroundColor Yellow;
+
     if($config.Columns -ne $null){
         $config.Columns | ForEach-Object {
             Write-Progress -Activity "Creating Site Columns..." -Status "Progress > $($config.Columns.indexOf($_) + 1) of $($config.Columns.Count)" -PercentComplete (($($config.Columns.indexOf($_) +1)/$($config.Columns.Count)*100)) -CurrentOperation $_.InternalName
@@ -307,7 +351,7 @@ Function Start-IABuilder($web,$config){
             Add-SPSecurityGroup -web $web -config $_
         }
     }
-    
+    Write-Host "Finished..." -ForegroundColor Green;
 }
 
 Export-ModuleMember -Function *
